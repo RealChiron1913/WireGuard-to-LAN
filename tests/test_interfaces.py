@@ -57,7 +57,7 @@ def test_discovery_failure_is_reported_without_mutating_saved_state():
 
 
 def test_interface_rpc_has_only_application_read_scope():
-    acl=json.loads((ROOT/'root/usr/share/rpcd/acl.d/luci-app-wgnat6.json').read_text())['luci-app-wgnat6']
+    acl=json.loads((ROOT/'root/usr/share/rpcd/acl.d/luci-app-wgnat6.json').read_text(encoding='utf-8'))['luci-app-wgnat6']
     assert 'interfaces' in acl['read']['ubus']['wgnat6']
     assert 'file' not in acl['read']['ubus'] and 'network' not in acl['read']
 

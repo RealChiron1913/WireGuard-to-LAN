@@ -5,6 +5,7 @@ permissions:
 jobs:
   tests:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-24.04, windows-latest]
     runs-on: ${{ matrix.os }}
@@ -28,6 +29,7 @@ jobs:
   network:
     runs-on: ubuntu-24.04
     strategy:
+      fail-fast: false
       matrix:
         profile: [home, office, routed]
     steps:

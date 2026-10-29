@@ -48,11 +48,14 @@ finally: s.close()
 
 
 def run(*argv, check=True):
-    return subprocess.run(list(argv), check=check, text=True, capture_output=True)
+    result = subprocess.run(list(argv), check=False, text=True, capture_output=True)
+    if check and result.returncode:
+        raise RuntimeError(f"Command failed ({result.returncode}): {list(argv)!r}\nstdout: {result.stdout}\nstderr: {result.stderr}")
+    return result
 
 
 def main():
-    profiles=json.loads((ROOT/'tests/network_profiles.json').read_text())
+    profiles=json.loads((ROOT/'tests/network_profiles.json').read_text(encoding='utf-8'))
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--profile',choices=sorted(profiles),default='home')
     options=parser.parse_args()
@@ -65,7 +68,7 @@ def main():
     ns = {k: prefix + k for k in ("r", "wg", "lan", "t")}
     created, server = [], None
     lua = LuaRuntime(unpack_returned_tuples=True)
-    e = lua.execute((ROOT / "root/usr/lib/wgnat6/engine.lua").read_text())
+    e = lua.execute((ROOT / "root/usr/lib/wgnat6/engine.lua").read_text(encoding='utf-8'))
     env = to_lua(lua, dict(local_ips=[profile['lan_router'],profile['wg_router']],peer_ips=[profile['wg_client']+'/32'],route_device=lan_device))
     env.lan=e.subnet(profile['lan_router'],profile['lan_bits'])
     env.wg=e.parse_subnet(config['wireguard_subnet']) if config.get('wireguard_subnet') else e.subnet(profile['wg_router'],profile['wg_bits'])
@@ -117,7 +120,7 @@ ct state established,related accept
 }
 '''
             else: text = e.batch(g)
-            file.write_text(text)
+            file.write_text(text, encoding='utf-8')
             nft("-c", "-f", str(file)); nft("-f", str(file)); verify(g)
         try:
             for name in ns.values():
@@ -146,7 +149,13 @@ ct state established,related accept
             inside("r","sysctl","-qw","net.ipv4.ip_forward=1")
             g = e.generate(to_lua(lua,config),env); install(g,True)
             unrelated = directory / "unrelated.nft"
-            unrelated.write_text('table inet unrelated { chain sentinel { type filter hook forward priority -20; policy accept; counter comment "unrelated"; } }')
+            unrelated.write_text('''table inet unrelated {
+    chain sentinel {
+        type filter hook forward priority -20; policy accept;
+        counter comment "unrelated"
+    }
+}
+''', encoding='utf-8')
             nft("-f",str(unrelated)); sentinel = stable_ruleset()
             server = subprocess.Popen(["ip","netns","exec",ns["t"],sys.executable,"-u","-c",SERVER,json.dumps([config['target_ip'],profile['target_next'],profile['other_target']])], stdout=subprocess.DEVNULL)
             time.sleep(0.4)
@@ -174,7 +183,7 @@ ct state established,related accept
                 for protocol in ("tcp","udp"): client(k,protocol,profile['target_next'])
             print("PASS: target change and idempotent scoped chain replacement")
             bad=directory/"bad.nft"
-            bad.write_text(e.batch(g)+'add rule inet fw4 nonexistent_chain accept\n')
+            bad.write_text(e.batch(g)+'add rule inet fw4 nonexistent_chain accept\n', encoding='utf-8')
             assert nft("-c","-f",str(bad),check=False).returncode != 0
             assert nft("-f",str(bad),check=False).returncode != 0
             verify(changed)

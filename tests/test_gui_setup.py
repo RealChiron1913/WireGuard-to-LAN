@@ -150,7 +150,7 @@ def test_empty_disabled_config_can_be_saved_after_setup(engine):
 
 
 def test_initialize_rpc_is_narrowly_scoped():
-    acl=json.loads((ROOT/'root/usr/share/rpcd/acl.d/luci-app-wgnat6.json').read_text())['luci-app-wgnat6']
+    acl=json.loads((ROOT/'root/usr/share/rpcd/acl.d/luci-app-wgnat6.json').read_text(encoding='utf-8'))['luci-app-wgnat6']
     assert 'initialize' in acl['write']['ubus']['wgnat6']
     assert 'initialize' not in acl['read']['ubus']['wgnat6']
     assert 'file' not in acl['write']['ubus']
