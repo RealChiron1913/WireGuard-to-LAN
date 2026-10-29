@@ -1,0 +1,17 @@
+.test-deps/
+__pycache__/
+.pytest_cache/
+dist/
+*.ipk
+*.apk
+sdk/
+.test-tmp*/
+.test-run*/
+.build-check*/
+.venv/
+.vscode/
+*.nft.backup
+*.key
+*.ipk.bak
+.env
+.env.*

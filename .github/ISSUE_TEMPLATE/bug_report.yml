@@ -1,0 +1,21 @@
+name: 问题与兼容性报告
+description: 报告安装、页面、NAT 或系统适配问题；安全漏洞请私下报告。
+body:
+  - type: textarea
+    id: environment
+    attributes:
+      label: 系统环境
+      description: 固件、CPU 架构、包管理器、应用和 fw4/nft/LuCI 版本。不要提供私钥或完整 network 配置。
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤及预期/实际结果
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: 脱敏诊断
+      description: preflight/status、应用日志及接口/网段示例；隐去令牌、公网地址和业务信息。

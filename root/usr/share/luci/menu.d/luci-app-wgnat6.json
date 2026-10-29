@@ -1,0 +1,8 @@
+{
+  "admin/network/wgnat6": {
+    "title": "WireGuard NAT",
+    "order": 65,
+    "action": { "type": "view", "path": "wgnat6" },
+    "depends": { "acl": [ "luci-app-wgnat6" ] }
+  }
+}

@@ -1,0 +1,7 @@
+#!/bin/sh
+while :; do
+	/usr/sbin/wgnat6 initialize-worker >/dev/null
+	/usr/sbin/wgnat6 recover >/dev/null
+	/usr/sbin/wgnat6 maintain >/dev/null
+	sleep 3
+done

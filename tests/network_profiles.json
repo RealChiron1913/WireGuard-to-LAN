@@ -1,0 +1,20 @@
+{
+  "home": {
+    "config": {"enabled":"1","virtual_ip":"10.66.66.6","target_ip":"192.168.31.39","lan_interface":"br-lan","wireguard_interface":"vpn","protocol":"both"},
+    "lan_router":"192.168.31.10","lan_client":"192.168.31.20","lan_bits":24,
+    "wg_router":"10.66.66.1","wg_client":"10.66.66.2","wg_bits":24,
+    "target_next":"192.168.31.50","other_target":"192.168.31.88"
+  },
+  "office": {
+    "config": {"enabled":"1","virtual_ip":"172.27.1.6","target_ip":"10.20.8.39","lan_interface":"br-office","wireguard_interface":"wg-office","protocol":"both"},
+    "lan_router":"10.20.0.1","lan_client":"10.20.8.20","lan_bits":16,
+    "wg_router":"172.27.0.1","wg_client":"172.27.0.2","wg_bits":20,
+    "target_next":"10.20.8.50","other_target":"10.20.8.88"
+  },
+  "routed": {
+    "config": {"enabled":"1","virtual_ip":"172.22.15.6","target_ip":"172.30.40.9","lan_interface":"br-lab","wireguard_interface":"wg-lab","protocol":"both","wireguard_subnet":"10.99.0.0/24"},
+    "lan_router":"172.30.40.1","lan_client":"172.30.40.2","lan_bits":28,
+    "wg_router":"10.99.0.1","wg_client":"10.99.0.2","wg_bits":32,
+    "target_next":"172.30.40.10","other_target":"172.30.40.11"
+  }
+}

@@ -1,0 +1,13 @@
+#!/bin/sh
+# The second lock is flock(2), the same lock used by fw4. Lua lockf is NOT equivalent.
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+umask 077
+case "$1" in
+  setup|detach|boot|preflight|initialize-worker)
+    exec /usr/bin/flock -n -E 75 /var/run/wgnat6.lock /usr/bin/lua /usr/lib/wgnat6/main.lua "$@"
+    ;;
+  status|interfaces|verify|apply|apply_all|confirm|rollback|recover|maintain|rpc)
+    exec /usr/bin/flock -n -E 75 /var/run/wgnat6.lock /usr/bin/flock -n -E 75 /var/run/fw4.lock /usr/bin/lua /usr/lib/wgnat6/main.lua "$@"
+    ;;
+  *) echo 'Usage: wgnat6 preflight | setup [--migrate] | status | interfaces | verify | apply < proposal.json | confirm | rollback | recover | detach' >&2; exit 2 ;;
+esac

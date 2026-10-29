@@ -1,0 +1,16 @@
+# Each enabled virtual address must be reserved, unique, and routed by clients.
+config mapping 'main'
+	option enabled '1'
+	option virtual_ip '10.66.66.6'
+	option target_ip '192.168.31.39'
+	option lan_interface 'br-lan'
+	option wireguard_interface 'vpn'
+	option protocol 'both'
+
+config mapping 'device2'
+	option enabled '1'
+	option virtual_ip '10.66.66.7'
+	option target_ip '192.168.31.50'
+	option lan_interface 'br-lan'
+	option wireguard_interface 'vpn'
+	option protocol 'both'

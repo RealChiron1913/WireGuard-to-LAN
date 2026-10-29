@@ -1,0 +1,40 @@
+name: validate-package
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  tests:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r tests/requirements.txt
+      - run: python -m pytest tests -q
+      - run: node --check htdocs/luci-static/resources/view/wgnat6.js
+      - run: node --test tests/test_frontend.cjs
+      - run: sh tools/check_shell.sh
+        shell: bash
+        if: runner.os == 'Linux'
+      - run: python tools/build_ipk.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: luci-app-wgnat6-${{ runner.os }}
+          path: dist/
+  network:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        profile: [home, office, routed]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r tests/requirements.txt
+      - run: sudo apt-get update && sudo apt-get install -y nftables iproute2
+      - run: sudo "$(which python)" tests/linux_network.py --profile '${{ matrix.profile }}'

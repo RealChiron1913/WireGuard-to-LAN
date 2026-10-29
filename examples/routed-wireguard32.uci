@@ -1,0 +1,11 @@
+# WireGuard device address: 10.99.0.1/32. Client source network: 10.99.0.0/24.
+# Reserve and route the separate virtual address on the clients.
+config mapping 'main'
+	option enabled '1'
+	option virtual_ip '172.22.15.6'
+	option target_ip '172.30.40.9'
+	option lan_interface 'br-lab'
+	option wireguard_interface 'wg-lab'
+	option protocol 'both'
+	option lan_subnet ''
+	option wireguard_subnet '10.99.0.0/24'

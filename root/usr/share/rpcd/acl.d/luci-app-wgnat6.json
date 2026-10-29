@@ -1,0 +1,7 @@
+{
+  "luci-app-wgnat6": {
+    "description": "管理 WireGuard TCP/UDP 1:1 NAT",
+    "read": { "ubus": { "wgnat6": [ "status", "interfaces", "verify" ] } },
+    "write": { "ubus": { "wgnat6": [ "apply", "apply_all", "confirm", "rollback", "initialize", "initialize_all" ] } }
+  }
+}

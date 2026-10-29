@@ -1,0 +1,10 @@
+# Example only: adjust addresses and device names before importing.
+config mapping 'main'
+	option enabled '1'
+	option virtual_ip '10.66.66.6'
+	option target_ip '192.168.31.39'
+	option lan_interface 'br-lan'
+	option wireguard_interface 'vpn'
+	option protocol 'both'
+	option lan_subnet ''
+	option wireguard_subnet ''

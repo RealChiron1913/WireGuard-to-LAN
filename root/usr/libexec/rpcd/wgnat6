@@ -1,0 +1,13 @@
+#!/bin/sh
+case "$1" in
+  list)
+    echo '{"status":{},"interfaces":{},"verify":{},"apply":{"enabled":"","virtual_ip":"","target_ip":"","lan_interface":"","wireguard_interface":"","protocol":"","lan_subnet":"","wireguard_subnet":""},"apply_all":{"mappings_json":""},"initialize_all":{"mappings_json":"","migrate":""},"initialize":{"enabled":"","virtual_ip":"","target_ip":"","lan_interface":"","wireguard_interface":"","protocol":"","lan_subnet":"","wireguard_subnet":"","migrate":""},"confirm":{"token":""},"rollback":{}}'
+    ;;
+  call)
+    case "$2" in
+      status|interfaces|verify|apply|apply_all|confirm|rollback|initialize|initialize_all) exec /usr/sbin/wgnat6 rpc "$2" ;;
+      *) exit 2 ;;
+    esac
+    ;;
+  *) exit 2 ;;
+esac

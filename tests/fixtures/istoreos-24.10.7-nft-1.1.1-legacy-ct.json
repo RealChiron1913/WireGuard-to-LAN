@@ -1,0 +1,1 @@
+{"match":{"op":"==","left":{"ct":{"key":"daddr","dir":"original"}},"right":"10.66.66.6"}}
